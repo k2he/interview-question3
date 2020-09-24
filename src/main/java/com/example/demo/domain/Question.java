@@ -39,13 +39,7 @@ public class Question {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade=CascadeType.ALL)
   private List<Reply> replies;
-  
-  public void setReplies(List<Reply> replies) {
-    this.replies = replies;
-    for (Reply event : replies) {
-      event.setQuestion(this);
-    }
-  }
+
   /*
    * In real world, we may need add updatedTime, createTime using
    * @EnableJpaAuditing with @CreatedDate
