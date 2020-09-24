@@ -16,5 +16,5 @@ spring:
       ddl-auto: update
   h2:
     console:
-      enabled: false
+      enabled: true #set to false if you want to disable h2 console
 

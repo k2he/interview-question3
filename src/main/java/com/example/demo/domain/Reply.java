@@ -3,13 +3,11 @@
  */
 package com.example.demo.domain;
 
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,30 +24,24 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TBL_QUESTIONS")
-public class Question {
+@Table(name = "TBL_REPLIES")
+public class Reply {
 
   @Id
   @GeneratedValue
   private Long id;
-
-  private String author;
-
-  private String message;
-
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade=CascadeType.ALL)
-  private List<Reply> replies;
   
-  public void setReplies(List<Reply> replies) {
-    this.replies = replies;
-    for (Reply event : replies) {
-      event.setQuestion(this);
-    }
-  }
+//  private Long questionId;
+  
+  private String author;
+  
+  private String message;
+  
+  @ManyToOne
+  @JoinColumn(name = "questionId")
+  private Question question;
   /*
    * In real world, we may need add updatedTime, createTime using
-   * @EnableJpaAuditing with @CreatedDate
+   * @EnableJpaAuditing with @CreatedDate and @CreatedBy
    */
-  
-  
 }
