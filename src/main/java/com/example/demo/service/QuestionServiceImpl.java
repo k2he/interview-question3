@@ -3,6 +3,8 @@
  */
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Reply;
@@ -33,16 +35,22 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public Reply addReply(Long questionId, Reply reply) throws RecordNotFoundException {
-    Question question = getQuestionById(questionId);
+  public Reply addReplyToQuestion(Long questionId, Reply reply) throws RecordNotFoundException {
+    Question question = questionRepository.findById(questionId)
+        .orElseThrow(() -> new RecordNotFoundException("No Question found with given id: " + questionId));
     reply.setQuestion(question);
     return replyRepository.save(reply);
   }
 
   @Override
-  public Question getQuestionById(Long questionId) throws RecordNotFoundException {
-    return questionRepository.findById(questionId)
-        .orElseThrow(() -> new RecordNotFoundException("No Question found with given id"));
+  public Question getQuestionById(Long questionId) {
+    Optional<Question> result = questionRepository.findById(questionId);
+    return result.isPresent() ? result.get() : null;
+  }
+
+  @Override
+  public List<Question> getAllQuestions() {
+    return questionRepository.findAll();
   }
 
 }

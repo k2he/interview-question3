@@ -18,16 +18,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class GetQuestionResponseDto {
+public class QuestionWithReplyDetailDto {
   
   private Long id;
   
-  private Long questionId; 
-  
-//  @NotEmpty
   private String author;
   
-//  @NotEmpty
   private String message;
   
   private List<ReplyDto> replies;

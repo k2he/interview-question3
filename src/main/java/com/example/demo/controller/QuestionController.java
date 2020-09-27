@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Reply;
-import com.example.demo.dto.GetQuestionResponseDto;
 import com.example.demo.dto.QuestionDto;
+import com.example.demo.dto.QuestionMapper;
+import com.example.demo.dto.QuestionWithReplyDetailDto;
 import com.example.demo.dto.ReplyDto;
 import com.example.demo.dto.ReplyMapper;
 import com.example.demo.exception.RecordNotFoundException;
-import com.example.demo.persistence.EmployeeEntity;
 import com.example.demo.service.QuestionService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +39,12 @@ public class QuestionController {
   @NonNull
   private QuestionService questionService;
 
-  // Create a Question
   @PostMapping
   public ResponseEntity<QuestionDto> createQuestion(@Valid @RequestBody QuestionDto questionDto)
       throws RecordNotFoundException {
-    log.debug("Creating a new question." + questionDto.toString());
-    Question question = Question.builder().author(questionDto.getAuthor())
+    log.debug("Creating a new question. {}", questionDto.toString());
+    Question question = Question.builder()
+        .author(questionDto.getAuthor())
         .message(questionDto.getMessage()).build();
 
     Question addedQuestion = questionService.addQuestion(question);
@@ -57,33 +57,52 @@ public class QuestionController {
   @PostMapping("/{questionId}/reply")
   public ResponseEntity<ReplyDto> addReply(@RequestBody ReplyDto replyDto,
       @PathVariable Long questionId) throws RecordNotFoundException {
-    log.debug("Add a new reply." + replyDto.toString());
+    log.debug("Add a new reply: {}", replyDto.toString());
 
-    Reply reply =
-        Reply.builder().author(replyDto.getAuthor()).message(replyDto.getMessage()).build();
-    reply = questionService.addReply(questionId, reply);
+    Reply reply = Reply.builder()
+        .author(replyDto.getAuthor())
+        .message(replyDto.getMessage()).build();
+    reply = questionService.addReplyToQuestion(questionId, reply);
 
-    replyDto.setQuestionId(questionId);
-    replyDto.setId(reply.getId());
-    log.debug("Reply has been added." + replyDto.toString());
-    return new ResponseEntity<ReplyDto>(replyDto, new HttpHeaders(), HttpStatus.CREATED);
+    ReplyDto responseDto = ReplyMapper.convertToReplyDto(reply);
+    log.debug("Reply has been added." + responseDto.toString());
+    return new ResponseEntity<ReplyDto>(responseDto, new HttpHeaders(), HttpStatus.CREATED);
   }
 
   @GetMapping("/{questionId}")
-  public ResponseEntity<GetQuestionResponseDto> getQuestionById(@PathVariable("questionId") Long questionId)
-      throws RecordNotFoundException {
+  public ResponseEntity<QuestionWithReplyDetailDto> getQuestionById(
+      @PathVariable("questionId") Long questionId) throws RecordNotFoundException {
+    log.debug("Get question by id {}", questionId);
     Question question = questionService.getQuestionById(questionId);
 
-    // Convert result to response dto type
-    List<ReplyDto> replies = question.getReplies().stream()
-    .map(ReplyMapper::convertToReplyDto).collect(Collectors.toList());
+    if (question == null) {
+      return ResponseEntity.notFound().build();
+    } 
     
-    GetQuestionResponseDto responseDto = GetQuestionResponseDto.builder()
+    // Convert result to response dto type
+    List<ReplyDto> replies = question.getReplies().stream().map(ReplyMapper::convertToReplyDtoSkipQuestionId)
+        .collect(Collectors.toList());
+
+    QuestionWithReplyDetailDto responseDto = QuestionWithReplyDetailDto.builder()
         .id(question.getId())
         .author(question.getAuthor())
         .message(question.getMessage())
         .replies(replies).build();
-    
-    return new ResponseEntity<GetQuestionResponseDto>(responseDto, new HttpHeaders(), HttpStatus.OK);
+
+    return new ResponseEntity<QuestionWithReplyDetailDto>(responseDto, new HttpHeaders(),
+        HttpStatus.OK);
+  }
+
+  @GetMapping()
+  public ResponseEntity<List<QuestionDto>> getAllQuestions() {
+    log.debug("Get all questions.");
+    List<Question> questionList = questionService.getAllQuestions();
+
+    List<QuestionDto> questionDtoList = questionList.stream()
+        .map(QuestionMapper::convertToQuestionDto)
+        .collect(Collectors.toList());
+
+    return new ResponseEntity<List<QuestionDto>>(questionDtoList, new HttpHeaders(),
+        HttpStatus.OK);
   }
 }

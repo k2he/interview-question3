@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.AllArgsConstructor;
@@ -24,10 +23,8 @@ public class ReplyDto {
   
   private Long questionId;
   
-  @NotEmpty
   private String author;
   
-  @NotEmpty
   private String message;
   
 }

@@ -31,8 +31,6 @@ public class Reply {
   @GeneratedValue
   private Long id;
   
-//  private Long questionId;
-  
   private String author;
   
   private String message;

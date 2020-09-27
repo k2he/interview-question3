@@ -22,12 +22,12 @@ public class QuestionDto {
   
   private Long id;
   
-  private Long questionId; 
-  
   @NotEmpty
   private String author;
   
   @NotEmpty
   private String message;
+  
+  private int replies;
   
 }
