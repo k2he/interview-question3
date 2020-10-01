@@ -35,6 +35,7 @@ import com.example.demo.dto.QuestionDto;
 import com.example.demo.dto.QuestionMapper;
 import com.example.demo.dto.ReplyDto;
 import com.example.demo.dto.ReplyMapper;
+import com.example.demo.exception.RecordNotFoundException;
 import com.example.demo.service.QuestionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -163,7 +164,7 @@ public class QuestionControllerTest {
     Long requestId = new Long(10);
     
     // given
-    Mockito.when(questionService.getQuestionById(requestId)).thenReturn(null);
+    Mockito.when(questionService.getQuestionById(requestId)).thenThrow(new RecordNotFoundException(""));
     RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/questions/{questionId}", requestId)
             .accept(MediaType.APPLICATION_JSON);
     
@@ -209,6 +210,5 @@ public class QuestionControllerTest {
             .andExpect(jsonPath("$[1].id", is(2)))
             .andExpect(jsonPath("$[1].author", is("author2")))
             .andExpect(jsonPath("$[1].replies", is(0)));
-
   }
 }

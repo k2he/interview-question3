@@ -114,16 +114,18 @@ public class QuestionServiceTest {
     Mockito.when(questionRepository.findById(questionId)).thenReturn(Optional.empty());
 
     // when
-    Question result = questionService.getQuestionById(questionId);
-
+    Throwable exception = Assertions.assertThrows(RecordNotFoundException.class, () -> {
+      questionService.getQuestionById(questionId);
+    });
+    
     // then
-    Assertions.assertNull(result);
+    Assertions.assertNotNull(exception);
     verify(questionRepository, times(1)).findById(questionId);
   }
 
   @Test
   @DisplayName("Test getQuestionById() with questionId found, should return Question.")
-  public void getQuestionById_ShouldReturnResult() {
+  public void getQuestionById_ShouldReturnResult() throws RecordNotFoundException {
     Long questionId = 1L;
 
     Question question = Question.builder()

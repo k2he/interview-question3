@@ -17,8 +17,8 @@ public interface QuestionService {
   Question addQuestion(Question question);
 
   Reply addReplyToQuestion(Long questionId, Reply reply) throws RecordNotFoundException;
-  
-  Question getQuestionById(Long questionId);
-  
+
+  Question getQuestionById(Long questionId) throws RecordNotFoundException;
+
   List<Question> getAllQuestions();
 }

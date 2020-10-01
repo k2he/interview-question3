@@ -43,8 +43,7 @@ public class QuestionController {
   public ResponseEntity<QuestionDto> createQuestion(@Valid @RequestBody QuestionDto questionDto)
       throws RecordNotFoundException {
     log.debug("Creating a new question. {}", questionDto.toString());
-    Question question = Question.builder()
-        .author(questionDto.getAuthor())
+    Question question = Question.builder().author(questionDto.getAuthor())
         .message(questionDto.getMessage()).build();
 
     Question addedQuestion = questionService.addQuestion(question);
@@ -59,9 +58,8 @@ public class QuestionController {
       @PathVariable Long questionId) throws RecordNotFoundException {
     log.debug("Add a new reply: {}", replyDto.toString());
 
-    Reply reply = Reply.builder()
-        .author(replyDto.getAuthor())
-        .message(replyDto.getMessage()).build();
+    Reply reply =
+        Reply.builder().author(replyDto.getAuthor()).message(replyDto.getMessage()).build();
     reply = questionService.addReplyToQuestion(questionId, reply);
 
     ReplyDto responseDto = ReplyMapper.convertToReplyDto(reply);
@@ -75,19 +73,16 @@ public class QuestionController {
     log.debug("Get question by id {}", questionId);
     Question question = questionService.getQuestionById(questionId);
 
-    if (question == null) {
-      return ResponseEntity.notFound().build();
-    } 
-    
     // Convert result to response dto type
-    List<ReplyDto> replies = question.getReplies().stream().map(ReplyMapper::convertToReplyDtoSkipQuestionId)
-        .collect(Collectors.toList());
+    List<ReplyDto> replies = question.getReplies().stream()
+        .map(ReplyMapper::convertToReplyDtoSkipQuestionId).collect(Collectors.toList());
 
-    QuestionWithReplyDetailDto responseDto = QuestionWithReplyDetailDto.builder()
-        .id(question.getId())
-        .author(question.getAuthor())
-        .message(question.getMessage())
-        .replies(replies).build();
+    QuestionWithReplyDetailDto responseDto =
+        QuestionWithReplyDetailDto.builder()
+          .id(question.getId())
+          .author(question.getAuthor())
+          .message(question.getMessage())
+          .replies(replies).build();
 
     return new ResponseEntity<QuestionWithReplyDetailDto>(responseDto, new HttpHeaders(),
         HttpStatus.OK);
@@ -99,10 +94,8 @@ public class QuestionController {
     List<Question> questionList = questionService.getAllQuestions();
 
     List<QuestionDto> questionDtoList = questionList.stream()
-        .map(QuestionMapper::convertToQuestionDto)
-        .collect(Collectors.toList());
+        .map(QuestionMapper::convertToQuestionDto).collect(Collectors.toList());
 
-    return new ResponseEntity<List<QuestionDto>>(questionDtoList, new HttpHeaders(),
-        HttpStatus.OK);
+    return new ResponseEntity<List<QuestionDto>>(questionDtoList, new HttpHeaders(), HttpStatus.OK);
   }
 }
