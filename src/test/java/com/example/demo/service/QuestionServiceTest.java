@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Reply;
 import com.example.demo.exception.RecordNotFoundException;
@@ -25,18 +26,28 @@ import com.example.demo.repository.ReplyRepository;
  * @author kaihe
  *
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class QuestionServiceTest {
 
-  @MockBean
+  @Mock
   private QuestionRepository questionRepository;
 
-  @MockBean
+  @Mock
   private ReplyRepository replyRepository;
 
-  @Autowired
+  @Mock
+  private MessageService messageService;
+  
   private QuestionService questionService;
 
+  @BeforeEach
+  void setUp() {
+    questionService = QuestionServiceImpl.builder()
+        .questionRepository(questionRepository)
+        .replyRepository(replyRepository)
+        .messageService(messageService).build();
+  }
+  
   @Test
   @DisplayName("Test addQuestion() should return the question.")
   public void addQuestion_ShouldReturnQuestion() throws Exception {

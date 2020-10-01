@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Object> handleRecordNotFoundExceptionException(RecordNotFoundException ex,
       WebRequest request) {
 
-    // TODO: confirm requirement and convert to defined error object
+    // TODO: depends on requirement and convert to defined error object
     Map<String, Object> errorBody = new LinkedHashMap<>();
     errorBody.put("timestamp", LocalDateTime.now());
     errorBody.put("errorMessage", ex.getLocalizedMessage());
