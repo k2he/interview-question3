@@ -1,7 +1,7 @@
 How to run the app
 ==================
 1) in command line: mvn spring-boot:run
-2) in eclipse (if you installed spring suite): right click on DemoApplication.java -> Run as -> Spring Boot App
+2) in eclipse (if you installed Spring Tool Suite plugin): right click on DemoApplication.java -> Run as -> Spring Boot App
 2) to view Jacoco code coverage: open /target/site/jacoco/index.html (as for this project right now is 97%) 
 
 ## Things about the Code Design
