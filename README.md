@@ -2,7 +2,7 @@ How to run the app
 ==================
 1) in command line: mvn spring-boot:run
 2) in Eclipse (if you installed Spring Tool Suite plugin): right click on DemoApplication.java -> Run as -> Spring Boot App
-2) to view Jacoco code coverage: open /target/site/jacoco/index.html (as for this project right now is 97%) 
+2) to view Jacoco code coverage: go to project directory and open /target/site/jacoco/index.html (as for this project right now is 97%) 
 
 ## Things about the Code Design
 1) added <scope>provided</scope> to lombok maven dependency, since lombok only used at compile time, no need to include into the build package.
