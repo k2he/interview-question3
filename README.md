@@ -10,6 +10,7 @@ How to run the app
 3) added MessageService which loads message from /src/resouce/messages.properties, all messages are in a central place. In additional, it give us potential to load different message depends on local (eg: messages_fr.properties) 
 4) used contrctuor injection, since this is more sugguested way over field injection: https://reflectoring.io/constructor-injection/
 5) added GlobalExceptionHandler to handle resource not found exception, it should also handle other exceptions like Business exception, System Exception, Validation Exception and so on there. 
+6) TODO: ideally, we should add bean validation, but didn't do it due to lack of requirement (not sure which fields are required and so on).
 
 ## Test cases
 1) added Junit test cases for repository, service and controller, one for each. Testing normal case + exception case.
