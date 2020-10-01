@@ -14,4 +14,4 @@ How to run the app
 
 ## Test cases
 1) added Junit test cases for repository, service and controller, one for each. Testing normal case + exception case.
-2) added one Integration test case for Controller, since Integration test do not use mock, so testing controller is good enough.
+2) added one Integration test case for Controller (one test for each rest endpoint), since Integration test do not use mock, so testing controller is good enough.
