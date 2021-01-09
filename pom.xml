@@ -16,7 +16,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<project.build.locale>en_US</project.build.locale>
 		<lombok.version>1.18.10</lombok.version>
 		<h2.version>1.4.199</h2.version>
 		<jacoco.version>0.8.5</jacoco.version>
